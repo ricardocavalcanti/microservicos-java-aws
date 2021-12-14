@@ -4,12 +4,10 @@ import software.amazon.awscdk.RemovalPolicy;
 import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.StackProps;
 import software.amazon.awscdk.services.ec2.Vpc;
-import software.amazon.awscdk.services.ecs.AwsLogDriverProps;
-import software.amazon.awscdk.services.ecs.Cluster;
-import software.amazon.awscdk.services.ecs.ContainerImage;
-import software.amazon.awscdk.services.ecs.LogDriver;
+import software.amazon.awscdk.services.ecs.*;
 import software.amazon.awscdk.services.ecs.patterns.ApplicationLoadBalancedFargateService;
 import software.amazon.awscdk.services.ecs.patterns.ApplicationLoadBalancedTaskImageOptions;
+import software.amazon.awscdk.services.elasticloadbalancingv2.HealthCheck;
 import software.amazon.awscdk.services.logs.LogGroup;
 import software.constructs.Construct;
 
@@ -55,5 +53,13 @@ public class Service01Stack extends Stack {
                                 .build())
                         .publicLoadBalancer(true)
                         .build();
+
+        // Monitoramento se a aplicacao esta rodando
+        // localhost:8080/actuator/health  essa configuracao foi feita no app "aws_project01"
+        service01.getTargetGroup().configureHealthCheck(HealthCheck.builder()
+                        .path("/actuator/health")
+                        .port("8080")
+                        .healthyGrpcCodes("200")
+                .build());
     }
 }
