@@ -46,10 +46,10 @@ public class Service01Stack extends Stack {
                                                 .logGroup(LogGroup.Builder.create(this, "Service01LogGroup")
                                                         // Definimos nome que vai agrupar logs
                                                         .logGroupName("Service01")
-                                                        // Se precisar vai apagar
+                                                        // Se precisar vai apagar quando apagar servico
                                                         .removalPolicy(RemovalPolicy.DESTROY)
                                                         .build())
-                                                //Dentro do agrupamento de log, sao arquivos reciclados de tempo em tempo
+                                                // Dentro do agrupamento de log, sao arquivos reciclados de tempo em tempo
                                                 .streamPrefix("Service01")
                                         .build()))
                                 .build())
@@ -61,7 +61,7 @@ public class Service01Stack extends Stack {
         service01.getTargetGroup().configureHealthCheck(HealthCheck.builder()
                         .path("/actuator/health")
                         .port("8080")
-                        .healthyGrpcCodes("200")
+                        .healthyHttpCodes("200")
                 .build());
 
         // Define a capaciadade minima e maxima de auto scale em quantidade de estancias
